@@ -1,25 +1,37 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
+
+import axios from 'axios'
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [items, setItems] = useState([])
+  const [isLoading, setLoading] = useState(true)
+
+  const getItems = async () => {
+    const result = await axios.get(`http://localhost:3001/user`,
+    )
+  console.log(result.data)
+  setItems(result.data)
+  setLoading(false)
+}
+
+useEffect(() => {
+  getItems()
+}, [])
+
+return (
+  <div className="App">
+    {isLoading ? (<Backdrop
+      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
+      <CircularProgress color="inherit" />
+    </Backdrop>) : (
+      <h1>hi {items?.name}</h1>
+    )}
+  </div>
+);
 }
 
 export default App;
